@@ -18,6 +18,8 @@ class Map:
         self.filename = filename
         self._init_dict(clear)
 
+    # todo: add __getitem__
+
     def _init_dict(self, clear):
         """
         :param clear: True, the second dict of the array in file is removed
