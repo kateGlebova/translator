@@ -1,8 +1,1 @@
-[
-  {
-    "401": "PROCEDURE",
-    "402": "BEGIN",
-    "403": "END",
-    "404": "CONST"
-  }
-]
+[{"PROCEDURE": "401", "BEGIN" : "402", "END" : "403", "CONST": "404"}]

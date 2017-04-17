@@ -1,0 +1,6 @@
+{
+  "tables/delimiters" : -1,
+  "tables/key_words" : 400,
+  "tables/constants" : 500,
+  "tables/identifiers" : 1000
+}
