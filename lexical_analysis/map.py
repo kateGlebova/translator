@@ -6,11 +6,11 @@ class Map:
     Dict wrapper initialised from a json file with following structure:
     [ dict with initial values, dict with processed valued ]
     """
-    dict = {}
+    dictionary = {}
 
     def __init__(self, filename, clear=False):
         """
-        Initialise dict from the json file
+        Initialise dict from the json file.
         :param filename: name of the json file
         :param clear: True, the dict is filled only with initial values
                       False, the dict is filled with both initial and processed values
@@ -18,7 +18,8 @@ class Map:
         self.filename = filename
         self._init_dict(clear)
 
-    # todo: add __getitem__
+    def __getitem__(self, key):
+        return self.dictionary[key]
 
     def _init_dict(self, clear):
         """
@@ -27,18 +28,18 @@ class Map:
         with open(self.filename, 'r') as f:
             table = load(f)
 
-        self.dict = table[0]
+        self.dictionary = table[0]
 
-        if clear:
+        if clear or len(table) < 2:
             table.pop()
             with open(self.filename, 'w') as f:
                 dump(table, f)
         else:
-            self.dict = dict(self.dict, **table[1])
+            self.dictionary = dict(self.dictionary, **table[1])
 
     def add(self, key, value):
-        self.dict[key] = value
+        self.dictionary[key] = value
 
     def save(self):
         with open(self.filename, 'w') as f:
-            dump(self.dict, f)
+            dump(self.dictionary, f)
