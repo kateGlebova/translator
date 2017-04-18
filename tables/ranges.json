@@ -1,6 +1,6 @@
 {
-  "tables/delimiters" : -1,
-  "tables/key_words" : 400,
-  "tables/constants" : 500,
-  "tables/identifiers" : 1000
+  "delimiters.json" : -1,
+  "key_words.json" : 400,
+  "constants.json" : 500,
+  "identifiers.json" : 1000
 }

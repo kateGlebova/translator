@@ -1,0 +1,4 @@
+PROCEDURE here;
+(* doing nothing ***)
+CONST there = 9;
+BEGIN END;

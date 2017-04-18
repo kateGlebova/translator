@@ -1,6 +1,7 @@
 from json import load, dump
 
 import sys
+from os.path import join, dirname
 
 
 class Table:
@@ -9,6 +10,8 @@ class Table:
     [ dict with initial values, dict with processed valued ]
     """
 
+    tables_dir = join(dirname(__file__), '../')
+
     def __init__(self, filename, clear=False):
         """
         Initialise dict from the json file.
@@ -16,7 +19,7 @@ class Table:
         :param clear: True, the dict is filled only with initial values
                       False, the dict is filled with both initial and processed values
         """
-        self.filename = filename
+        self.filename = join(self.tables_dir, filename)
         self.table = self._init_dict(clear)
         self.last_code = self._init_last_code()
 
@@ -54,13 +57,19 @@ class Table:
         return table
 
     def _init_last_code(self):
-        try:
-            last_code = max(max(self.table[0].values()), max(self.table[1].values()))
-        except ValueError:
-            with open('tables/ranges.json') as ranges:
-                last_code = load(ranges).get(self.filename, 2000)
-        finally:
-            return int(last_code) + 1
+        last_code = -2
+
+        if self.table[0]:
+            last_code = max(self.table[0].values())
+
+        if self.table[1]:
+            last_code = max(last_code, max(self.table[1].values()))
+
+        if last_code == -2:
+            with open(join(self.tables_dir, 'tables/ranges.json')) as ranges:
+                last_code = load(ranges).get(self.filename.split('/')[-1], 2000)
+
+        return int(last_code) + 1
 
     def get_code(self, entry):
         if entry in self:
@@ -68,6 +77,7 @@ class Table:
         else:
             self.table[1][entry] = self.last_code
             self.last_code += 1
+            return self.table[1][entry]
 
     def save(self):
         with open(self.filename, 'w') as f:
