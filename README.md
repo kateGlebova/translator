@@ -1,5 +1,5 @@
-#Translators Programming Basics
-##Translator from the language with the following grammar
+# Translators Programming Basics
+## Translator from the language with the following grammar
 1. <signal-program> --> <program>
 2. <program> --> PROCEDURE <procedure-identifier><parameters-list> ; <block> ;
 3. <block> --> <declaration> BEGIN <statements-list> END
