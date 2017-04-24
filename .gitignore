@@ -3,3 +3,4 @@ env/
 *.docx
 .cache
 __pycache__
+*.pdf

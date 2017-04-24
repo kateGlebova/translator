@@ -1,7 +1,10 @@
+from os.path import join, dirname
+
 from lexical_analysis.table import Table
 
 
 # "0" dg
+# "1" -
 # "2" lt
 # "3" dm
 # "4" (
@@ -20,6 +23,7 @@ class LexicalAnalysis:
         self.symbols = Table('tables/symbols.json')
         self.processing_functions = {
             "0": self._process_constant,
+            "1": self._process_negative_constant,
             "2": self._process_identifier,
             "3": self._process_delimiter,
             "4": self._process_parant,
@@ -27,6 +31,7 @@ class LexicalAnalysis:
             "6": self._process_invalid
         }
         self.lexemes_string = []
+        self.current_row = 1
 
         with open(self.filename) as f:
             self.process_program(f)
@@ -47,12 +52,16 @@ class LexicalAnalysis:
     def process_program(self, f):
         character = self.get_character(f)
         while character:
+            if character['char'] == '\n':
+                self.current_row += 1
+
             lexeme_code, character = self.processing_functions[character['attribute']](f, character)
+
             if lexeme_code:
-                self.lexemes_string.append(lexeme_code)
+                self.lexemes_string.append((lexeme_code, self.current_row))
 
     def get_lexemes_string(self):
-        return tuple(self.lexemes_string)
+        return self.lexemes_string
 
     def _generate_code(self, table, lexeme):
         code = table.get_code(lexeme)
@@ -66,6 +75,13 @@ class LexicalAnalysis:
             self.buffer += character['char']
             character = self.get_character(f)
         return self._generate_code(self.constants, self.buffer), character
+
+    def _process_negative_constant(self, f, char):
+        self.buffer += char['char']
+        character = self.get_character(f)
+        if character['attribute'] == "0":
+            return self._process_constant(f, character)
+        return self._process_invalid(f, character)
 
     def _process_identifier(self, f, char):
         self.buffer += char['char']

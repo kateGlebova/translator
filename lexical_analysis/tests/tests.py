@@ -22,3 +22,11 @@ class TestLexicalAnalysis():
         answer = ('401', '-1', '1003', '2', '-1')
         with LexicalAnalysis(join(self.test_cases_dir, 'test_wrong')) as L:
             assert L.get_lexemes_string() == answer
+
+if __name__ == '__main__':
+    with LexicalAnalysis(join(dirname(__file__), 'test_wrong')) as L:
+        print(L.get_lexemes_string())
+        print('Constants table')
+        print(L.constants.table)
+        print('Identifiers table')
+        print(L.identifiers.table)
