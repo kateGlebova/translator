@@ -63,7 +63,7 @@ class Table:
             last_code = max(self.table[0].values())
 
         if self.table[1]:
-            last_code = max(last_code, max(self.table[1].values()))
+            last_code = max(str(last_code), max(self.table[1].values()))
 
         if last_code == -2:
             with open(join(self.tables_dir, 'tables/ranges.json')) as ranges:
@@ -75,9 +75,13 @@ class Table:
         if entry in self:
             return self[entry]
         else:
-            self.table[1][entry] = self.last_code
+            self.table[1][entry] = str(self.last_code)
             self.last_code += 1
             return self.table[1][entry]
+
+    def __iter__(self):
+        for code in (list(self.table[0].values()) + list(self.table[1].values())):
+            yield code
 
     def save(self):
         with open(self.filename, 'w') as f:
