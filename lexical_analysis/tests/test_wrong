@@ -1,4 +1,4 @@
-PROCEDURE & oom;
-(* not closed comment *)
-BEGIN END;
+PROCEDURE oom;
+(* closed comment *)
+BEGIN hello = 6; END;
 (* kejvsf

@@ -56,6 +56,7 @@ class LexicalAnalysis:
         while character:
             if character['char'] == '\n':
                 self.current_row += 1
+                self.current_column = 0
 
             lexeme_code, character = self.processing_functions[character['attribute']](f, character)
 
@@ -133,10 +134,12 @@ class LexicalAnalysis:
         return None, character
 
     def _process_invalid(self, f, char):
+        lexeme_column = self.current_column - len(self.buffer)
+
         if char:
             character = self.get_character(f)
             while character and character['attribute'] not in ("3", "4", "5"):
                 character = self.get_character(f)
-            return "-1", character
+            return ("-1", lexeme_column), character
 
-        return "-1", ''
+        return ("-1", lexeme_column), ''

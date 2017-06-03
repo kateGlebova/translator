@@ -1,3 +1,4 @@
-PROCEDURE age (mom : INTEGER; dad: FLOAT);
-CONST max = -107; min = 0;
-BEGIN END;
+PROCEDURE age (mom : INTEGER;);
+BEGIN
+hello = hel + lo;
+END;
