@@ -80,8 +80,8 @@ class Table:
             return self.table[1][entry]
 
     def __iter__(self):
-        for code in (list(self.table[0].values()) + list(self.table[1].values())):
-            yield code
+        for item in (list(self.table[0].items()) + list(self.table[1].items())):
+            yield item
 
     def save(self):
         with open(self.filename, 'w') as f:

@@ -32,6 +32,7 @@ class LexicalAnalysis:
         }
         self.lexemes_string = []
         self.current_row = 1
+        self.current_column = 0
 
         with open(self.filename) as f:
             self.process_program(f)
@@ -45,6 +46,7 @@ class LexicalAnalysis:
 
     def get_character(self, f):
         character = f.read(1)
+        self.current_column += 1
         if character:
             return {'char': character, 'attribute': self.symbols[str(ord(character))]}
         return None
@@ -58,15 +60,16 @@ class LexicalAnalysis:
             lexeme_code, character = self.processing_functions[character['attribute']](f, character)
 
             if lexeme_code:
-                self.lexemes_string.append((lexeme_code, self.current_row))
+                self.lexemes_string.append((lexeme_code[0], self.current_row, lexeme_code[1]))
 
     def get_lexemes_string(self):
         return self.lexemes_string
 
     def _generate_code(self, table, lexeme):
         code = table.get_code(lexeme)
+        lexeme_column = self.current_column - len(self.buffer)
         self.buffer = ''
-        return str(code)
+        return str(code), lexeme_column
 
     def _process_constant(self, f, char):
         self.buffer += char['char']

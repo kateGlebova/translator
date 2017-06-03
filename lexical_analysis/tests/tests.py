@@ -24,7 +24,7 @@ class TestLexicalAnalysis():
             assert L.get_lexemes_string() == answer
 
 if __name__ == '__main__':
-    with LexicalAnalysis(join(dirname(__file__), 'test_wrong')) as L:
+    with LexicalAnalysis(join(dirname(__file__), 'test_correct')) as L:
         print(L.get_lexemes_string())
         print('Constants table')
         print(L.constants.table)
