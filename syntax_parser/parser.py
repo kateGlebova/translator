@@ -29,7 +29,7 @@ class Parser:
         'identifier': [17, [(idn, ) for idn in Table('tables/identifiers.json')]],
         'statement': [18, [('variable-identifier', ('=', '0'), 'variable-identifier', 'operation', 'variable-identifier', (';', '2'))]],
         'operation': [19, [('operation-symbol', )]],
-        'operation-symbol': [20, [(('+', '5'), ), (('*', '6'), ), (('7', '/'), )]]
+        'operation-symbol': [20, [(('+', '5'), ), (('*', '6'), ), (('/', '7'), )]]
     }
 
     def __init__(self, lexemes):
