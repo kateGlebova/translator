@@ -1,6 +1,6 @@
 from os.path import join, dirname
 
-from lexical_analysis.table import Table
+from table import Table
 
 
 # "0" dg

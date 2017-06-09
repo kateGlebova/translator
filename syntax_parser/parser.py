@@ -39,10 +39,10 @@ class Parser:
         self.current_lexeme_idx = 0
         self.current_lexeme = self._get_current_lexeme()
         if self.current_lexeme and self.current_lexeme[0] == '-1':
-            self.listing.error('Lexical error in a %s row, %s column' % (self.current_lexeme[1], self.current_lexeme[2]))
+            self.error_listing.error('Lexical error in a %s row, %s column' % (self.current_lexeme[1], self.current_lexeme[2]))
             self._next_lexeme()
         self.tree = Tree()
-        self.listing = self._init_logger()
+        self.error_listing = self._init_logger()
 
     def _get_element_code(self, element):
         if element in self.identifiers:
@@ -65,7 +65,8 @@ class Parser:
         root = self.tree.add_node('signal-program')
         result, row, column = self._process_rule('signal-program', root, self.tree)
         if not result:
-            self.listing.error('You made a syntax error in %s row, %s column.' % (row, column))
+            self.error_listing.error('You made a syntax error in %s row, %s column.' % (row, column))
+            sys.exit(1)
         else:
             self.tree.display_tree()
 
@@ -127,7 +128,7 @@ class Parser:
 
     @staticmethod
     def _init_logger():
-        logger_path = join(dirname(__file__), '../listing.log')
+        logger_path = join(dirname(__file__), '../errors.log')
         with open(logger_path, 'w') as f:
             pass
         logger = getLogger('parser_listing')
@@ -141,7 +142,7 @@ class Parser:
         self.current_lexeme_idx += 1
         self.current_lexeme = self._get_current_lexeme()
         while self.current_lexeme and self.current_lexeme[0] == '-1':
-            self.listing.error('Lexical error in a %s row, %s column' % (self.current_lexeme[1], self.current_lexeme[2]))
+            self.error_listing.error('Lexical error in a %s row, %s column' % (self.current_lexeme[1], self.current_lexeme[2]))
             self.current_lexeme_idx += 1
             self.current_lexeme = self._get_current_lexeme()
 

@@ -20,3 +20,6 @@ class Node:
         child = Node(info)
         self._children.append((child, edge))
         return child
+
+    def __str__(self):
+        return self._info

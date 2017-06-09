@@ -1,0 +1,19 @@
+.686P
+.XMM
+.model flat
+
+PUBLIC _main
+
+.const
+{}
+.code
+
+_main:
+    push ebp
+    mov	ebp, esp
+    xor	eax, eax
+    mov	esp, ebp
+    pop	ebp
+    ret	0
+
+END

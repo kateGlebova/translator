@@ -1,3 +1,5 @@
-PROCEDURE age (mom : INTEGER;);
+PROCEDURE age (mom : INTEGER; dad: FLOAT;);
+CONST l = 23;
+      v = -14;
 BEGIN
 END;
