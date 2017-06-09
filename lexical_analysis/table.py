@@ -80,7 +80,7 @@ class Table:
             return self.table[1][entry]
 
     def __iter__(self):
-        for item in (list(self.table[0].items()) + list(self.table[1].items())):
+        for item in (list(self.table[0]) + list(self.table[1])):
             yield item
 
     def save(self):

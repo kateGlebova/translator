@@ -9,27 +9,32 @@ from syntax_parser.tree import Tree
 
 
 class Parser:
+    constants = Table('tables/constants.json')
+    delimiters = Table('tables/delimiters.json')
+    identifiers = Table('tables/identifiers.json')
+    key_words = Table('tables/key_words.json')
+
     RULES = {
         'signal-program': [1, [('program',)]],
-        'program': [2, [(('PROCEDURE', '401'), 'procedure-identifier', 'parameters-list', (';', '2'), 'block', (';', '2'))]],
-        'block': [3, [('declarations', ('BEGIN', '402'), 'statements-list', ('END', '403'))]],
+        'program': [2, [('PROCEDURE', 'procedure-identifier', 'parameters-list', ';', 'block', ';')]],
+        'block': [3, [('declarations', 'BEGIN', 'statements-list', 'END')]],
         'statements-list': [4, [('statement', 'statements-list'), ('empty',)]],
-        'parameters-list': [5, [(('(', '4'), 'declarations-list', (')', '3')), ('empty',)]],
+        'parameters-list': [5, [('(', 'declarations-list', ')'), ('empty',)]],
         'declarations-list': [6, [('declaration', 'declarations-list'), ('empty',)]],
-        'declaration': [7, [('variable-identifier', (':', '1'), 'attribute', (';', '2'))]],
-        'attribute': [8, [(('INTEGER', '1001'),), (('FLOAT', '1002'),)]],
+        'declaration': [7, [('variable-identifier', ':', 'attribute', ';')]],
+        'attribute': [8, [('INTEGER', ), ('FLOAT',)]],
         'declarations': [9, [('constant-declarations',)]],
-        'constant-declarations': [10, [('404', 'constant-declarations-list'), ('empty',)]],
+        'constant-declarations': [10, [('CONST', 'constant-declarations-list'), ('empty',)]],
         'constant-declarations-list': [11, [('constant-declaration', 'constant-declarations-list'), ('empty',)]],
-        'constant-declaration': [12, [('constant-identifier', ('=', '0'), 'constant', (';', '2'))]],
-        'constant' : [13, [(constant, ) for constant in Table('tables/constants.json')]],
+        'constant-declaration': [12, [('constant-identifier', '=', 'constant', ';')]],
+        'constant': [13, [(constant, ) for constant in constants]],
         'constant-identifier': [14, [('identifier', )]],
         'variable-identifier': [15, [('identifier', )]],
         'procedure-identifier': [16, [('identifier',)]],
-        'identifier': [17, [(idn, ) for idn in Table('tables/identifiers.json')]],
-        'statement': [18, [('variable-identifier', ('=', '0'), 'variable-identifier', 'operation', 'variable-identifier', (';', '2'))]],
+        'identifier': [17, [(idn, ) for idn in identifiers]],
+        'statement': [18, [('variable-identifier', '=',  'variable-identifier', 'operation', 'variable-identifier', ';')]],
         'operation': [19, [('operation-symbol', )]],
-        'operation-symbol': [20, [(('+', '5'), ), (('*', '6'), ), (('/', '7'), )]]
+        'operation-symbol': [20, [('+', ), ('*', ), ('/', )]]
     }
 
     def __init__(self, lexemes):
@@ -41,6 +46,17 @@ class Parser:
             self._next_lexeme()
         self.tree = Tree()
         self.listing = self._init_logger()
+
+    def _get_element_code(self, element):
+        if element in self.identifiers:
+            return self.identifiers[element]
+        if element in self.constants:
+            return self.constants[element]
+        if element in self.key_words:
+            return self.key_words[element]
+        if element in self.delimiters:
+            return self.delimiters[element]
+        return element
 
     def _get_current_lexeme(self):
         try:
@@ -58,11 +74,11 @@ class Parser:
 
     def _process_rule(self, element, node, tree):
         if not element in self.RULES:
-            if isinstance(element, tuple):
-                element = element[1]
+            element = self._get_element_code(element)
             row, column = self.current_lexeme[1:]
             if element == self.current_lexeme[0] or element == 'empty':
                 if not element == 'empty':
+                    self._add_lexeme_to_tree(tree, node, element, None)
                     self._next_lexeme()
                 return True, row, column
             return False, row, column
@@ -75,6 +91,8 @@ class Parser:
                 new_node = self._add_lexeme_to_tree(tree, node, lexeme, rule[0])
                 recursive_correct, row, column = self._process_rule(lexeme, new_node, tree)
                 correct = correct and recursive_correct
+                if not correct:
+                    break
             return correct, row, column
 
         if len(rule[1]) > 1:
