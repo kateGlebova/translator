@@ -1,7 +1,3 @@
 PROCEDURE age (mom : INTEGER;);
 BEGIN
-hel22lo = hell2 / lo;
-hello = hel + lo;
-hel11lo = hell1 + lo;
-hel33lo = hell3 * lo;
 END;

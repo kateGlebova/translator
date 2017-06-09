@@ -18,7 +18,7 @@ class Parser:
         'signal-program': [1, [('program',)]],
         'program': [2, [('PROCEDURE', 'procedure-identifier', 'parameters-list', ';', 'block', ';')]],
         'block': [3, [('declarations', 'BEGIN', 'statements-list', 'END')]],
-        'statements-list': [4, [('statement', 'statements-list'), ('empty',)]],
+        'statements-list': [4, [('empty',)]],
         'parameters-list': [5, [('(', 'declarations-list', ')'), ('empty',)]],
         'declarations-list': [6, [('declaration', 'declarations-list'), ('empty',)]],
         'declaration': [7, [('variable-identifier', ':', 'attribute', ';')]],
@@ -32,9 +32,6 @@ class Parser:
         'variable-identifier': [15, [('identifier', )]],
         'procedure-identifier': [16, [('identifier',)]],
         'identifier': [17, [(idn, ) for idn in identifiers]],
-        'statement': [18, [('variable-identifier', '=',  'variable-identifier', 'operation', 'variable-identifier', ';')]],
-        'operation': [19, [('operation-symbol', )]],
-        'operation-symbol': [20, [('+', ), ('*', ), ('/', )]]
     }
 
     def __init__(self, lexemes):
