@@ -5,3 +5,9 @@ env/
 __pycache__
 *.pdf
 .DS_Store
+*.pyc
+syntax_parser/*.pyc
+lexical_analysis/*.pyc
+code_generator/*.pyc
+*.pages
+*.log
